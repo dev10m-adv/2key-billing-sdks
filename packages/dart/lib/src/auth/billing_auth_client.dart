@@ -47,6 +47,7 @@ class BillingAuthClient {
     required this.storagePrefix,
     AuthSessionLauncher? sessionLauncher,
     http.Client? httpClient,
+    bool nativeSignIn = false,
   })  : _origin = normalizeBillingApiBaseUrl(billingBaseUrl),
         _storage = storage,
         deepLinkScheme = deepLinkScheme.trim() {
@@ -75,6 +76,10 @@ class BillingAuthClient {
           storage: _BetterAuthStorageAdapter(storage),
           storagePrefix: storagePrefix,
           sessionLauncher: sessionLauncher,
+          // Browser opens GET /api/auth/native/sign-in/social (no provider login
+          // URL in our link, which Chrome's phishing check flags). Needs a
+          // billing server with @2key/auth-native that has that endpoint.
+          nativeSignIn: nativeSignIn,
         ),
       ),
       httpClient: httpClient,
